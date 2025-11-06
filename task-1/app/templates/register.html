@@ -4,13 +4,28 @@
   <form method="POST" action="{{ url_for('main.register') }}">
     {{ form.hidden_tag() }}
 
+
+       <!-- Username field -->
     <label for="username">{{ form.username.label }}</label>
     {{ form.username(id="username", placeholder="Enter username") }}
-
     {% for err in form.username.errors %}
       <p style="color:red">{{ err }}</p>
     {% endfor %}
 
+          <!-- Email field -->
+    <label for="email">{{ form.email.label }}</label>
+    {{ form.email(id="email", placeholder="Enter email") }}
+    {% for err in form.email.errors %}
+      <p style="color:red">{{ err }}</p>
+    {% endfor %}
+
+
+
+
+
+
+
+       <!-- Submit -->
     {{ form.submit() }}
   </form>
 
