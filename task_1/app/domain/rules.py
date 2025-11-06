@@ -36,14 +36,17 @@ def check_reserved(name):
 ########
 
 ########
+"""
 def email():
-"""Validate format
-Restrict domains. Only allow emails ending in .edu, .ac.uk, and .org"""
+Validate format
+Restrict domains. Only allow emails ending in .edu, .ac.uk, and .org
     pass
+"""
 
 
+"""
 def password():
-"""Implement a robust password policy that enforces:
+Implement a robust password policy that enforces:
 
 Minimum length: 12 characters
 At least:
@@ -63,14 +66,17 @@ welcome
 iloveyou
 abc123
 monkey
-football"""
+football
     pass
+"""
 
-def confirm_password():
 
+"""def confirm_password():
+"""
 
-def BioorCommentField():
-    pass
+"""def bio_or_comment():
+    pass"""
+
 
 
 #jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'end'.
