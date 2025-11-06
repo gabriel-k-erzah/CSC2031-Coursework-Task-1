@@ -16,8 +16,7 @@ class RegistrationForm(FlaskForm):
 
 
     def validate_email(self, field):
-        #try:
-            #email
+        pass
 
 
     def validate_password(self, field):
