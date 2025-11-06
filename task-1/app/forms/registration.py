@@ -8,18 +8,19 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     #method in Registration Form to validate username
-    def validate_username(self, value):
+    def validate_username(self, field):
         try:
-            username(value.data)
+            username(field.data)
         except ValueError as e:
             raise ValidationError(str(e))
 
 
-    def validate_email(self, value):
-        pass
+    def validate_email(self, field):
+        #try:
+            #email
 
 
-    def validate_password(self, value):
+    def validate_password(self, field):
         pass
 
     def validate_confirm_password(self, value):

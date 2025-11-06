@@ -2,8 +2,8 @@
 #######
 def username(value):
     """Length: 3–30 characters
-Allowed characters: letters and underscores
-Disallow reserved usernames: admin, root, superuser"""
+    Allowed characters: letters and underscores
+    Disallow reserved usernames: admin, root, superuser"""
     value = str(value)
 
     # iteration over the string to check for only letters and underscores
@@ -36,12 +36,44 @@ def check_reserved(name):
 ########
 
 ########
-"""
-def email():
-Validate format
-Restrict domains. Only allow emails ending in .edu, .ac.uk, and .org
-    pass
-"""
+
+def email(value):
+    """Validate format
+    Restrict domains. Only allow emails ending in .edu, .ac.uk, and .org
+    only check after the @
+    """
+    value = str(value).strip().lower()
+    allowed_domains = {"edu", "ac.uk", "org"}
+
+    #sanity check
+    if "@" not in value or value.count("@") != 1:
+        raise ValueError("Enter a valid email address.")
+
+    #only checks for the domain
+    domain = value[value.index("@") + 1:]
+
+    #manual check for domain
+    match = False
+    for domain in allowed_domains:
+        if domain.endswith(domain):
+            match = True
+            break
+
+    #output error for post @
+    if not match:
+        raise ValueError("Email must end with .edu, .ac.uk, or .org.")
+
+    #output error message for pre @
+    if not domain.replace(".", "").isalpha():
+        raise ValueError("Invalid characters in email domain.")
+
+    return value
+
+
+
+
+
+
 
 
 """
