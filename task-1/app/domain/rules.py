@@ -1,10 +1,12 @@
+import bleach
 
-#######
+#---------------------------------------------------------username checks-----------------------------------------------
+
 def username(value):
     """Length: 3–30 characters
     Allowed characters: letters and underscores
     Disallow reserved usernames: admin, root, superuser"""
-    value = str(value)
+    value = bleach.clean(str(value)).strip()
 
     # iteration over the string to check for only letters and underscores
     check_char(value)
@@ -15,7 +17,8 @@ def username(value):
 
     return value
 
-#helper methods
+#--------------------------------------------username helper methods----------------------------------------------------
+
 def check_char(value):
     for char in value:
         if not (char.isalpha() or char == "_"):
@@ -33,29 +36,39 @@ def check_reserved(name):
         raise ValueError("Attempt logged.")
     return name
 
-########
+#-----------------------------------------------------------------------------------------------------------------------
 
-########
+
+#---------------------------------------------------------email checks-------------------------------------------------
 
 def email(value):
     """Validate format
     Restrict domains. Only allow emails ending in .edu, .ac.uk, and .org
     only check after the @
     """
-    value = str(value).strip().lower()
-    allowed_domains = {"edu", "ac.uk", "org"}
+    value = bleach.clean(str(value)).strip().lower()
+    check_format(value)
+    check_domain(value)
+    return value
 
+#------------------------------------------------------email helper methods----------------------------------------------
+
+def check_format(value):
     #sanity check
     if "@" not in value or value.count("@") != 1:
         raise ValueError("Enter a valid email address.")
+    return value
+
+def check_domain(value):
+    allowed_domains = ("edu", "ac.uk", "org")
 
     #only checks for the domain
     domain = value[value.index("@") + 1:]
 
     #manual check for domain
     match = False
-    for domain in allowed_domains:
-        if domain.endswith(domain):
+    for allowed in allowed_domains:
+        if domain.endswith(allowed):
             match = True
             break
 
@@ -69,11 +82,7 @@ def email(value):
 
     return value
 
-
-
-
-
-
+#-----------------------------------------------------------------------------------------------------------------------
 
 
 """
