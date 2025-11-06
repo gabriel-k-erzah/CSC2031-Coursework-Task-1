@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from task_1.app.forms.registration import RegistrationForm
+from app.forms.registration import RegistrationForm
 
 
 main = Blueprint('main', __name__)
