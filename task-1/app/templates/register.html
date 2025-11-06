@@ -14,7 +14,7 @@
     {{ form.submit() }}
   </form>
 
-  {% if form.username.data %}
-    <p>Hello {{ form.username.data }}</p>
-  {% endif %}
+{% if not form.errors and form.is_submitted() %}
+  <p>Hello {{ form.username.data }}</p>
+{% endif %}
 {% endblock %}
