@@ -1,11 +1,20 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block content %}
-<form method="POST" novalidate>
-    <input name="name" placeholder="Enter your name">
-    <input type="submit" value="Register">
+  <form method="POST" action="{{ url_for('main.register') }}">
+    {{ form.hidden_tag() }}
 
-</form>
-<p>Hello {{ name | safe }}</p>
+    <label for="username">{{ form.username.label }}</label>
+    {{ form.username(id="username", placeholder="Enter username") }}
+
+    {% for err in form.username.errors %}
+      <p style="color:red">{{ err }}</p>
+    {% endfor %}
+
+    {{ form.submit() }}
+  </form>
+
+  {% if form.username.data %}
+    <p>Hello {{ form.username.data }}</p>
+  {% endif %}
 {% endblock %}
-
-<!-- error caused from, endblock  not end block due to Jinja2-->

@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, ValidationError
 from app.domain.rules import username
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), username])
+    username = StringField('Username', validators=[DataRequired()])
     submit = SubmitField('Register')
 
     #method in Registration Form to validate username
