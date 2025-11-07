@@ -6,8 +6,9 @@ def username(value):
     """Length: 3–30 characters
     Allowed characters: letters and underscores
     Disallow reserved usernames: admin, root, superuser"""
-    value = bleach.clean(str(value)).strip()
 
+
+    value = bleach.clean(str(value)).strip()
     # iteration over the string to check for only letters and underscores
     check_char(value)
     # check for if the string entered is in range
@@ -84,43 +85,87 @@ def check_domain(value):
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+#-----------------------------------------password checks---------------------------------------------------------------
+def password(value, *, username_value=None, email_value=None):
+    """
+    Implement a robust password policy that enforces:
+    Minimum length: 12 characters
+    At least:
+    One uppercase letter
+    One lowercase letter
+    One digit
+    One special character
 
-"""
-def password():
-Implement a robust password policy that enforces:
+    Must not contain the username or email
+    Must not contain whitespace characters (e.g., spaces)
 
-Minimum length: 12 characters
-At least:
-One uppercase letter
-One lowercase letter
-One digit
-One special character
-Must not contain the username or email
-Must not contain whitespace characters (e.g., spaces)
-Must not be a common password in the list:
-password123
-admin
-123456
-qwerty
-letmein
-welcome
-iloveyou
-abc123
-monkey
-football
-    pass
-"""
+    Must not be a common password in the list:
+    password123
+    admin
+    123456
+    qwerty
+    letmein
+    welcome
+    iloveyou
+    abc123
+    monkey
+    football
+  """
+    value = bleach.clean(str(value)).strip()
 
-#def confirm_password():
+    password_policy(value)
+    no_username_or_email(value, username_value, email_value)
+    whitespace(value)
+    common_password(value)
 
-"""def confirm_password():
-"""
+    return value
+
+#--------------------------------------------password helper methods----------------------------------------------------
+def password_policy(value):
+    #length check password must be longer than 12 characters
+    if len(value) < 12:
+        raise ValueError("Password must be at least 12 characters long.")
+
+    #complexity check based off password policy
+    if not (any(char.isupper() for char in value)
+            and any(char.islower() for char in value)
+            and any(char.isdigit() for char in value)):
+        raise ValueError("Password must contain at least one uppercase letter, one lowercase letter, and one digit.")
+
+
+def no_username_or_email(password_value, username_value, email_value):
+    """checks that the password entered does not contain the username or email"""
+    password_value = bleach.clean(str(password_value)).lower()
+    username_value = bleach.clean(str(username_value)).lower()
+    email_value = bleach.clean(str(email_value)).lower()
+
+   # check if password contains username or email
+    if username_value in password_value or email_value in password_value:
+        raise ValueError("Password cannot contain username or email.")
+
+def whitespace(value):
+    """checks that the password entered does not contain whitespace characters"""
+    if " " in value:
+        raise ValueError("Password cannot contain whitespace characters.")
+
+def common_password(value):
+    """checks that the password entered is not a common password after cleaning"""
+    value = bleach.clean(str(value)).lower()
+    common_passswords = ["password123", "admin", "123456", "qwerty", "letmein", "welcome", "iloveyou", "abc123", "monkey", "football"]
+
+    if value in common_passswords:
+        raise ValueError("Password is too common.")
+
+
+
+#------------------------------------------- confirm password ----------------------------------------------------------
+def confirm_password(password_entered, password_confirmation):
+    """checks that the password entered matches the password confirmation"""
+    if password_entered != password_confirmation:
+        raise ValueError("Passwords do not match.")
+
+
+
 
 """def bio_or_comment():
     pass"""
-
-
-
-#jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'end'.
-# Jinja was looking for the following tags: 'endblock'. The innermost
-# block that needs to be closed is 'block'.
