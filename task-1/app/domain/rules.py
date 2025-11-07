@@ -1,13 +1,13 @@
 import bleach
 from app.domain.logger import log_event
 
+
 #---------------------------------------------------------username checks-----------------------------------------------
 
 def username(value):
     """Length: 3–30 characters
     Allowed characters: letters and underscores
     Disallow reserved usernames: admin, root, superuser"""
-
 
     value = bleach.clean(str(value)).strip()
     # iteration over the string to check for only letters and underscores
@@ -19,6 +19,7 @@ def username(value):
 
     return value
 
+
 #--------------------------------------------username helper methods----------------------------------------------------
 
 def check_char(value):
@@ -28,11 +29,13 @@ def check_char(value):
             log_event("warning", "Invalid username character", username=value, bad_char=ch)
             raise ValueError("Username can only contain letters and underscores.")
 
+
 def check_length(value):
     if len(value) < 3 or len(value) > 30:
         # log then raise error
         log_event("warning", "Username length violation", username=value, length=len(value))
         raise ValueError("Username must be between 3 and 30 characters.")
+
 
 def check_reserved(name):
     reserved = {"admin", "root", "superuser"}
@@ -58,6 +61,7 @@ def email(value):
     check_domain(value)
     return value
 
+
 #------------------------------------------------------email helper methods----------------------------------------------
 
 def check_format(value):
@@ -67,6 +71,7 @@ def check_format(value):
         log_event("warning", "Invalid email format", email=value)
         raise ValueError("Enter a valid email address.")
     return value
+
 
 def check_domain(value):
     allowed_domains = ("edu", "ac.uk", "org")
@@ -89,6 +94,7 @@ def check_domain(value):
         # log then raise error
         log_event("warning", "Dirty chars in email domain", email=value, domain=domain)
         raise ValueError("Invalid characters in email domain.")
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -127,6 +133,7 @@ def password(value, *, username_value=None, email_value=None):
 
     return value
 
+
 #--------------------------------------------password helper methods----------------------------------------------------
 def password_policy(value):
     # length check password must be longer than 12 characters
@@ -146,23 +153,25 @@ def no_username_or_email(password_value, username_value, email_value):
     username_value = bleach.clean(str(username_value)).lower()
     email_value = bleach.clean(str(email_value)).lower()
 
-   # check if password contains username or email
+    # check if password contains username or email
     if username_value in password_value or email_value in password_value:
         raise ValueError("Password cannot contain username or email.")
+
 
 def whitespace(value):
     """checks that the password entered does not contain whitespace characters"""
     if " " in value:
         raise ValueError("Password cannot contain whitespace characters.")
 
+
 def common_password(value):
     """checks that the password entered is not a common password after cleaning"""
     value = bleach.clean(str(value)).lower()
-    common_passswords = ["password123", "admin", "123456", "qwerty", "letmein", "welcome", "iloveyou", "abc123", "monkey", "football"]
+    common_passswords = ["password123", "admin", "123456", "qwerty", "letmein", "welcome", "iloveyou", "abc123",
+                         "monkey", "football"]
 
     if value in common_passswords:
         raise ValueError("Password is too common.")
-
 
 
 #------------------------------------------- confirm password ----------------------------------------------------------
@@ -170,8 +179,6 @@ def confirm_password(password_entered, password_confirmation):
     """checks that the password entered matches the password confirmation"""
     if password_entered != password_confirmation:
         raise ValueError("Passwords do not match.")
-
-
 
 
 def bio_or_comment(value):
@@ -198,5 +205,3 @@ def bio_or_comment(value):
     # strip=True removes disallowed tags (not escape them just remove those bad tags entirely)
     sanitized = bleach.clean(str(value), tags=allowed_tags, attributes=allowed_attrs, strip=True)
     return sanitized
-
-
