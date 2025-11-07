@@ -1,35 +1,40 @@
 {% extends "base.html" %}
 
+{% block title %}Register · Secure Registration{% endblock %}
+
 {% block content %}
-  <form method="POST" action="{{ url_for('main.register') }}">
+  <!-- flashed messages -->
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% if msgs %}
+      {% for cat, msg in msgs %}
+        <p class="flash {{ cat }}">{{ msg }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('main.register') }}" novalidate>
     {{ form.hidden_tag() }}
 
-
-       <!-- Username field -->
     <label for="username">{{ form.username.label }}</label>
     {{ form.username(id="username", placeholder="Enter username") }}
-    {% for err in form.username.errors %}
-      <p style="color:red">{{ err }}</p>
-    {% endfor %}
+    {% for err in form.username.errors %}<p style="color:red">{{ err }}</p>{% endfor %}
 
-          <!-- Email field -->
     <label for="email">{{ form.email.label }}</label>
-    {{ form.email(id="email", placeholder="Enter email") }}
-    {% for err in form.email.errors %}
-      <p style="color:red">{{ err }}</p>
-    {% endfor %}
+    {{ form.email(id="email", placeholder="you@uni.edu") }}
+    {% for err in form.email.errors %}<p style="color:red">{{ err }}</p>{% endfor %}
 
+    <label for="password">{{ form.password.label }}</label>
+    {{ form.password(id="password", placeholder="Create a strong password") }}
+    {% for err in form.password.errors %}<p style="color:red">{{ err }}</p>{% endfor %}
 
+    <label for="confirm_password">{{ form.confirm_password.label }}</label>
+    {{ form.confirm_password(id="confirm_password", placeholder="Repeat password") }}
+    {% for err in form.confirm_password.errors %}<p style="color:red">{{ err }}</p>{% endfor %}
 
-
-
-
-
-       <!-- Submit -->
     {{ form.submit() }}
   </form>
 
-{% if not form.errors and form.is_submitted() %}
-  <p>Hello {{ form.username.data }}</p>
-{% endif %}
+  {% if not form.errors and form.is_submitted() %}
+    <p>Welcome {{ form.username.data }} ({{ form.email.data }})</p>
+  {% endif %}
 {% endblock %}

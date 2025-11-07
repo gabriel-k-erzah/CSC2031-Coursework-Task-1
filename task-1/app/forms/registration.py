@@ -8,7 +8,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = StringField('Password', validators=[DataRequired()])
     confirm_password = StringField('Confirm Password', validators=[DataRequired()])
-    bio_or_comment = StringField('Bio or Comment', validators=[DataRequired()])
+    #bio_or_comment = StringField('Bio or Comment', validators=[DataRequired()])
     submit = SubmitField('Register')
 
     #method in Registration Form to validate username
