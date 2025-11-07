@@ -31,6 +31,12 @@
     {{ form.confirm_password(id="confirm_password", placeholder="Repeat password") }}
     {% for err in form.confirm_password.errors %}<p style="color:red">{{ err }}</p>{% endfor %}
 
+    <label for="bio_or_comment">{{ form.bio_or_comment.label }}</label>
+    {{ form.bio_or_comment(id="bio_or_comment", placeholder="Tell us about yourself (optional)") }}
+    {% for err in form.bio_or_comment.errors %}
+      <p style="color:red">{{ err }}</p>
+    {% endfor %}
+
     {{ form.submit() }}
   </form>
 

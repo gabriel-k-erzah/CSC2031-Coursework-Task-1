@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Registering...{% endblock %}
+{% block title %}Loading...{% endblock %}
 {% block content %}
   <h2>Registration successful!</h2>
-  <p>Redirecting to your home page…</p>
+  <p>Redirecting to your home page...</p>
+
   <script>
-    setTimeout(() => { window.location.href = "{{ url_for('main.home') }}"; }, 2000);
+    setTimeout(() => {
+      window.location.href = "{{ url_for('main.home') }}?username={{ username }}&bio={{ bio | urlencode }}";
+    }, 2000);
   </script>
 {% endblock %}

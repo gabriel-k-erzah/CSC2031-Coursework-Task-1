@@ -1,17 +1,22 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError, Optional
 from app.domain.rules import *
 
 class RegistrationForm(FlaskForm):
+
+#------------------------------------- The fields in Registration Form--------------------------------------------------
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
+
     password = StringField('Password', validators=[DataRequired()])
     confirm_password = StringField('Confirm Password', validators=[DataRequired()])
-    #bio_or_comment = StringField('Bio or Comment', validators=[DataRequired()])
+
+    bio_or_comment = StringField('Bio or Comment', validators=[Optional()])
+
     submit = SubmitField('Register')
 
-    #method in Registration Form to validate username
+#----------------------------------------------  validation methods  ---------------------------------------------------
     def validate_username(self, field):
         try:
             username(field.data)
@@ -43,8 +48,12 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(str(e))
 
 
-    def validate_bio_or_comment(self):
-        pass
+    def validate_bio_or_comment(self, field):
+        """Sanitize the bio/comment input before saving or displaying."""
+        field.data = bio_or_comment(field.data or "")
+
+#-----------------------------------------------------------------------------------------------------------------------
+
 
 
 

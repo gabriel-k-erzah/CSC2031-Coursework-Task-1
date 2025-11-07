@@ -1,4 +1,5 @@
 import bleach
+from app.domain.logger import log_event
 
 #---------------------------------------------------------username checks-----------------------------------------------
 
@@ -23,19 +24,24 @@ def username(value):
 def check_char(value):
     for char in value:
         if not (char.isalpha() or char == "_"):
+            # log then raise error
+            log_event("warning", "Invalid username character", username=value, bad_char=ch)
             raise ValueError("Username can only contain letters and underscores.")
 
 def check_length(value):
     if len(value) < 3 or len(value) > 30:
+        # log then raise error
+        log_event("warning", "Username length violation", username=value, length=len(value))
         raise ValueError("Username must be between 3 and 30 characters.")
-    return value
 
 def check_reserved(name):
     reserved = {"admin", "root", "superuser"}
     name = str(name).strip().lower()
     if name in reserved:
+        #log then raise error
+        log_event("warning", "Reserved username attempt", username=norm)
         raise ValueError("Attempt logged.")
-    return name
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -55,33 +61,34 @@ def email(value):
 #------------------------------------------------------email helper methods----------------------------------------------
 
 def check_format(value):
-    #sanity check
+    # sanity check
     if "@" not in value or value.count("@") != 1:
+        # log then raise error
+        log_event("warning", "Invalid email format", email=value)
         raise ValueError("Enter a valid email address.")
     return value
 
 def check_domain(value):
     allowed_domains = ("edu", "ac.uk", "org")
-
-    #only checks for the domain
+    # only checks for the domain
     domain = value[value.index("@") + 1:]
-
-    #manual check for domain
+    # manual check for domain
     match = False
     for allowed in allowed_domains:
         if domain.endswith(allowed):
             match = True
             break
-
-    #output error for post @
+    # output error for post @
     if not match:
+        # log then raise error
+        log_event("warning", "Disallowed email domain", email=value, domain=domain)
         raise ValueError("Email must end with .edu, .ac.uk, or .org.")
 
-    #output error message for pre @
+    # output error message for pre @
     if not domain.replace(".", "").isalpha():
+        # log then raise error
+        log_event("warning", "Dirty chars in email domain", email=value, domain=domain)
         raise ValueError("Invalid characters in email domain.")
-
-    return value
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -122,7 +129,7 @@ def password(value, *, username_value=None, email_value=None):
 
 #--------------------------------------------password helper methods----------------------------------------------------
 def password_policy(value):
-    #length check password must be longer than 12 characters
+    # length check password must be longer than 12 characters
     if len(value) < 12:
         raise ValueError("Password must be at least 12 characters long.")
 
@@ -167,5 +174,29 @@ def confirm_password(password_entered, password_confirmation):
 
 
 
-"""def bio_or_comment():
-    pass"""
+def bio_or_comment(value):
+    """an optional field to allow the user to tell them about themselves e.g courses studied, hobbies, etc.
+    sanitisation checks will be done in the form:
+    Ensure secure handling of user-generated content:
+    Whitelist of safe HTML tags:
+    <b> (bold)
+    <i> (italic)
+    <u> (underline)
+    <em> (emphasis)
+    <strong> (strong emphasis)
+    <a> (anchor links — with safe attributes like href and title)
+    <p> (paragraph)
+    <ul>, <ol>, <li> (lists)
+    Enable autoescaping if and where needed in Jinja2 templates
+    Display sanitized bio content safely in the browser
+    """
+    if not value:
+        return ""
+    allowed_tags = ["b", "i", "u", "em", "strong", "a", "p", "ul", "ol", "li"]
+    allowed_attrs = {"a": ["href", "title"]}
+
+    # strip=True removes disallowed tags (not escape them just remove those bad tags entirely)
+    sanitized = bleach.clean(str(value), tags=allowed_tags, attributes=allowed_attrs, strip=True)
+    return sanitized
+
+

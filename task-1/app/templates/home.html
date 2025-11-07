@@ -2,7 +2,16 @@
 {% block title %}Home · Secure Registration{% endblock %}
 
 {% block content %}
-  <h1>Welcome to the Secure Portal </h1>
+  <h1>Welcome, {{ username }} 👋</h1>
+
+  {% if bio %}
+    <div>
+      <h3>Your Bio:</h3>
+      <p>{{ bio | safe }}</p>
+    </div>
+  {% else %}
+    <p>You didn’t add a bio.</p>
+  {% endif %}
 
   <form method="GET" action="{{ url_for('main.register') }}">
     <button type="submit">Back to Register</button>
