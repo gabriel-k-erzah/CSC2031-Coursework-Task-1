@@ -1,4 +1,4 @@
-import logging, time
+import logging
 from flask import current_app, request
 
 #-------------------------------------- logger function ----------------------------------------------------------------
@@ -16,7 +16,7 @@ def log_event(level, message, **context):
     details = " | ".join(f"{k}={v}" for k, v in context.items())
     # final log entry
     entry = f"ip={ip} | {message} | {details}"
-    # log at correct level
+    # log at the correct level
     if level.lower() == "warning":
         logger.warning(entry)
     else:

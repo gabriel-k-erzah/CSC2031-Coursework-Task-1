@@ -14,7 +14,7 @@ def username(value):
     check_char(value)
     # check for if the string entered is in range
     check_length(value)
-    #check for name attempt and log, incase user tries to elevate
+    #check for name attempt and log, incase the user tries to elevate
     check_reserved(value)
 
     return value
@@ -25,14 +25,14 @@ def username(value):
 def check_char(value):
     for char in value:
         if not (char.isalpha() or char == "_"):
-            # log then raise error
-            log_event("warning", "Invalid username character", username=value, bad_char=ch)
+            # log then raise an error
+            log_event("warning", "Invalid username character", username=value, bad_char=char)
             raise ValueError("Username can only contain letters and underscores.")
 
 
 def check_length(value):
     if len(value) < 3 or len(value) > 30:
-        # log then raise error
+        # log then raise an error
         log_event("warning", "Username length violation", username=value, length=len(value))
         raise ValueError("Username must be between 3 and 30 characters.")
 
@@ -41,8 +41,8 @@ def check_reserved(name):
     reserved = {"admin", "root", "superuser"}
     name = str(name).strip().lower()
     if name in reserved:
-        #log then raise error
-        log_event("warning", "Reserved username attempt", username=norm)
+        #log then raise an error
+        log_event("warning", "Reserved username attempt", username=name)
         raise ValueError("Attempt logged.")
 
 
@@ -67,7 +67,7 @@ def email(value):
 def check_format(value):
     # sanity check
     if "@" not in value or value.count("@") != 1:
-        # log then raise error
+        # log then raise an error
         log_event("warning", "Invalid email format", email=value)
         raise ValueError("Enter a valid email address.")
     return value
@@ -85,13 +85,13 @@ def check_domain(value):
             break
     # output error for post @
     if not match:
-        # log then raise error
+        # log then raise an error
         log_event("warning", "Disallowed email domain", email=value, domain=domain)
         raise ValueError("Email must end with .edu, .ac.uk, or .org.")
 
     # output error message for pre @
     if not domain.replace(".", "").isalpha():
-        # log then raise error
+        # log then raise an error
         log_event("warning", "Dirty chars in email domain", email=value, domain=domain)
         raise ValueError("Invalid characters in email domain.")
 
@@ -110,7 +110,7 @@ def password(value, *, username_value=None, email_value=None):
     One special character
 
     Must not contain the username or email
-    Must not contain whitespace characters (e.g., spaces)
+    Must not contain whitespace characters (e.g. spaces)
 
     Must not be a common password in the list:
     password123
@@ -167,10 +167,10 @@ def whitespace(value):
 def common_password(value):
     """checks that the password entered is not a common password after cleaning"""
     value = bleach.clean(str(value)).lower()
-    common_passswords = ["password123", "admin", "123456", "qwerty", "letmein", "welcome", "iloveyou", "abc123",
+    common_passwords = ["password123", "admin", "123456", "qwerty", "letmein", "welcome", "iloveyou", "abc123",
                          "monkey", "football"]
 
-    if value in common_passswords:
+    if value in common_passwords:
         raise ValueError("Password is too common.")
 
 
@@ -182,7 +182,7 @@ def confirm_password(password_entered, password_confirmation):
 
 
 def bio_or_comment(value):
-    """an optional field to allow the user to tell them about themselves e.g courses studied, hobbies, etc.
+    """an optional field to allow the user to tell them about themselves .e.g courses studied, hobbies, etc.
     sanitisation checks will be done in the form:
     Ensure secure handling of user-generated content:
     Whitelist of safe HTML tags:
@@ -195,13 +195,13 @@ def bio_or_comment(value):
     <p> (paragraph)
     <ul>, <ol>, <li> (lists)
     Enable autoescaping if and where needed in Jinja2 templates
-    Display sanitized bio content safely in the browser
+    Display sanitised bio content safely in the browser
     """
     if not value:
         return ""
     allowed_tags = ["b", "i", "u", "em", "strong", "a", "p", "ul", "ol", "li"]
     allowed_attrs = {"a": ["href", "title"]}
 
-    # strip=True removes disallowed tags (not escape them just remove those bad tags entirely)
+    # strip=True removes disallowed tags (not escape them, just remove those bad tags entirely)
     sanitized = bleach.clean(str(value), tags=allowed_tags, attributes=allowed_attrs, strip=True)
     return sanitized
