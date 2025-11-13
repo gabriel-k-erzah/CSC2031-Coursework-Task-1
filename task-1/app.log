@@ -1,0 +1,10 @@
+2025-11-07 23:45:00,842 WARNING: ip=127.0.0.1 | Username length violation | username=Ga | length=2
+2025-11-07 23:45:00,843 WARNING: ip=127.0.0.1 | Username length violation | username=Ga | length=2
+2025-11-07 23:48:25,286 WARNING: ip=127.0.0.1 | Username length violation | username=gt | length=2
+2025-11-07 23:48:25,286 WARNING: ip=127.0.0.1 | Username length violation | username=gt | length=2
+2025-11-07 23:54:15,570 WARNING: ip=127.0.0.1 | Reserved username attempt | username=admin
+2025-11-07 23:54:15,570 WARNING: ip=127.0.0.1 | Reserved username attempt | username=admin
+2025-11-08 00:09:16,339 WARNING: ip=127.0.0.1 | Username length violation | username=h | length=1
+2025-11-08 00:09:16,340 WARNING: ip=127.0.0.1 | Username length violation | username=h | length=1
+2025-11-08 00:09:27,677 WARNING: ip=127.0.0.1 | Reserved username attempt | username=admin
+2025-11-08 00:09:27,678 WARNING: ip=127.0.0.1 | Reserved username attempt | username=admin
